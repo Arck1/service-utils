@@ -1,0 +1,54 @@
+version: '3'
+
+services:
+
+  postgres:
+    image: postgres
+    environment:
+      POSTGRES_PASSWORD: mysecretpassword
+    ports:
+      - "5432:5432"
+    volumes:
+      - ./postgres-data:/var/lib/postgresql/data
+    restart: "no"
+    networks:
+      - service
+
+  mysql:
+    image: mysql
+    environment:
+      MYSQL_ROOT_PASSWORD: mysecretpassword
+    ports:
+      - "3306:3306"
+    volumes:
+      - ./mysql-data:/var/lib/mysql
+    restart: "no"
+    networks:
+      - service
+
+  redis:
+    image: redis
+    restart: "no"
+    command: ["redis-server", "--appendonly", "yes"]
+    ports:
+      - "6379:6379"
+    volumes:
+      - ./redis-data:/data
+    networks:
+      - service
+
+  rabbitmq:
+    image: rabbitmq
+    restart: "no"
+    command: ["rabbitmq-server"]
+    ports:
+      - "15672:15672"
+      - "5672:5672"
+    volumes:
+      - ./rabbitmq:/var/lib/rabbitmq
+      - ./rabbitmq/conf/:/etc/rabbitmq/
+    networks:
+      - service
+
+networks:
+  service:
