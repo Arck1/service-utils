@@ -48,6 +48,19 @@ services:
     networks:
       - service
 
+  openvpn:
+    image: kylemanna/openvpn:latest
+    container_name: openvpn
+    restart: always
+    env_file: .env
+    cap_add:
+      - NET_ADMIN
+    ports:
+      - "1194:1194/udp"
+    volumes:
+      - openvpn-data:/etc/openvpn
+
+
 networks:
   service:
 
@@ -55,4 +68,4 @@ volumes:
   postgres-data:
   mysql-data:
   redis-data:
-
+  openvpn-data:
